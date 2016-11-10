@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+  ng1:
+    image: nginx:latest
+    volumes:
+      - "./index1.html:/usr/share/nginx/html/index.html"
+    restart: always
+  
+  ng2:
+    image: nginx:latest
+    volumes:
+      - "./index2.html:/usr/share/nginx/html/index.html"
+    restart: always
+
+  loadbalancer:
+    depends_on:
+      - ng1
+      - ng2
+    image: haproxy:1.5
+    volumes:
+      - "./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg"
+    ports:
+      - "8000:80"
+    restart: always
